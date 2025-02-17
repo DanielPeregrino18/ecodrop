@@ -23,7 +23,7 @@ const SignupSchema = Yup.object().shape({
         .oneOf([true], "You must accept the terms and conditions"),
 });
 
-export default function RegistroForm() {
+export default function RegistroForm({ setIsAuthenticate }) {
     const navigate = useNavigate();
     return (
         <>
@@ -50,6 +50,7 @@ export default function RegistroForm() {
                                 onSubmit={async (values) => {
                                     const res = await registroApi(values.name, values.email, values.password);
                                     if (res === "exito") {
+                                        setIsAuthenticate(true);
                                         navigate("/index")
                                     } else {
                                         toast.error(res.error);

@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar2 from '../components/Navbar2'
-import {getAllUsuarios} from '../api/usuarios.api'
-function Index() {
+import { getUsuario } from '../api/usuarios.api'
+
+export default function Index() {
   const navigate = useNavigate();
-  const [name,setName] = useState('');
+  const [name, setName] = useState('');
+  const [saldo, setSaldo] = useState(0);
+  const [historial, setHistorial] = useState([]);
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -14,23 +18,38 @@ function Index() {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const data = await getAllUsuarios();
+        const data = await getUsuario();
         setName(data.username);
-      } catch (error) {
-        console.error('Error al obtener usuarios:', error);
-      }
+        setSaldo(data.saldo);
+        setHistorial(data.historial);
     };
-  
     fetchData();
   }, []);
-     
+
   return (
     <div className='h-screen'>
       <Navbar2 />
-      Bienvenido {name}
+      <div>
+        <p className='text-2xl font-bold text-green-800'>Bienvenido {name}</p>
+        <div className='flex flex-row'>
+          <div className='basis-2/3'>
+                hola
+          </div>
+          <div className='basis-1/3 flex justify-center'>
+            <div className='w-60 bg-green-200 text-center border rounded-lg p-4'>
+              <p className='text-xl font-bold'>Puntos</p>
+              {saldo}
+            </div>
+          </div>
+        </div>
+        
+        {historial.map((dep, index) => (
+          <div key={index}>
+            <p>Fecha: {dep.fecha}</p>
+            <p>Material: {dep.material}</p>
+          </div>
+        ))}
+      </div>
     </div>
   )
-}
-
-export default Index
+}9

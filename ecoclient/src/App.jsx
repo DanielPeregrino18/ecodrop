@@ -16,7 +16,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login setIsAuthenticate={setIsAuthenticate} />} />
-        <Route path='/registro' element={<Registro />} />
+        <Route path='/registro' element={<Registro setIsAuthenticate={setIsAuthenticate} />} />
         <Route path='/index' element={isAuthenticated ? <Index /> : <Navigate to="/login" />}/>
       </Routes>
       <Toaster />

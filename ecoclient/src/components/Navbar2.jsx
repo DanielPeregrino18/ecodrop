@@ -47,7 +47,7 @@ export default function Nabvar2() {
                                 Inicio
                             </Link>
                             <Link to="/foundation" className="text-gray-800 hover:text-green-600 font-medium">
-                                Foundation
+                                Ubicaciones
                             </Link>
                             <Link to="/about" className="text-gray-800 hover:text-green-600 font-medium">
                                 Acerca de

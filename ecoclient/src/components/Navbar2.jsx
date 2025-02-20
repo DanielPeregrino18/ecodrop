@@ -58,7 +58,7 @@ export default function Nabvar2() {
                         </div>
 
                         <div className="flex items-center space-x-1 sm:space-x-4">
-                            <Link to="#" className="text-gray-800 hover:text-green-600 font-medium md:mx-4">
+                            <Link to="/perfil" className="text-gray-800 hover:text-green-600 font-medium md:mx-4">
                                 Perfil
                             </Link>
                             <motion.div

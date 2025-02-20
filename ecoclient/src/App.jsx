@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Registro from './pages/Registro';
 import Index from './pages/Index';
 import Home from './pages/Home';
+import Perfil from './pages/Perfil';
 import Footer from './components/Footer';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path='/login' element={<Login setIsAuthenticate={setIsAuthenticate} />} />
         <Route path='/registro' element={<Registro setIsAuthenticate={setIsAuthenticate} />} />
         <Route path='/index' element={isAuthenticated ? <Index /> : <Navigate to="/login" />}/>
+        <Route path='/perfil' element={isAuthenticated ? <Perfil /> : <Navigate to="/login" />}/>
       </Routes>
       <Toaster />
       <Footer />

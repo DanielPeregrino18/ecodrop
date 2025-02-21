@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
-from .models import getUserByEmail, registrarUsuario, getUsuarioById
+from .models import getUserByEmail, registrarUsuario, getUsuarioById, getUsuarioPerfilbyId, actPerfil, validarPassword
 import bcrypt
 from .tokens import token_required, generate_token
 
@@ -46,6 +46,12 @@ def registro(request):
     hashed_password = bcrypt.hashpw(usuario['password'].encode('utf-8'), salt)
     usuario['password'] = hashed_password
     usuario['saldo'] = 0.0
+    usuario['racha'] = 0
+    usuario['nivel'] = 1
+    usuario['exp'] = 0
+    usuario['metaexp'] = 10
+    usuario['historial'] = []
+    usuario['telefono'] = ''
     try:
         res = registrarUsuario(usuario)
         return Response({
@@ -62,3 +68,26 @@ def getUsuario(request):
     user_id = request.token_payload.get('user_id')
     user = getUsuarioById(user_id)
     return Response(user, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@token_required
+def getUsuarioPerfil(request):
+    user_id = request.token_payload.get('user_id')
+    user = getUsuarioPerfilbyId(user_id)
+    return Response(user, status=status.HTTP_200_OK)
+
+@api_view(['PUT'])
+@token_required
+def actualizarPerfil(request):
+    user_id = request.token_payload.get('user_id')
+    datos = request.data
+   
+    if validarPassword(user_id,datos.get('password')):
+       if actPerfil(user_id, datos.get('username'), datos.get('telefono')):
+           return Response({"mensaje":"Usuario actuallizado correctamente"}, status=status.HTTP_200_OK)
+       return Response({"error":"No se pudo actualizar la información"}, status=status.HTTP_400_BAD_REQUEST)
+    return Response({"error":"La contraseña es incorrecta"}, status=status.HTTP_401_UNAUTHORIZED)
+    #user = getUsuarioPerfilbyId(user_id)
+
+    
+

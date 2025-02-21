@@ -1,11 +1,21 @@
-import { useState } from 'react'
+
 import Navbar2 from '../components/Navbar2';
 import CambiarUser from '../components/perfil/CambiarUser';
 import CambiarPass from '../components/perfil/CambiarPass';
+import { getUsuarioPerfil } from '../api/usuarios.api';
+import { useState,useEffect } from 'react';
+import CardPerfil from '../components/perfil/CardPerfil';
 
 
 export default function Perfil() {
-  const [showPasI, setShowPasI] = useState([false, false, false]);
+  const [user, setUser] = useState({});
+   useEffect(() => {
+      const fetchData = async () => {
+        const data = await getUsuarioPerfil();
+        setUser(data);
+      };
+      fetchData();
+    }, []);
 
   return (
     <div className='' style={{ backgroundColor: '#b3e3b4' }}>
@@ -14,21 +24,11 @@ export default function Perfil() {
         Perfil
       </div>
       <div className='flex flex-col md:flex-row md:mx-30 py-5'>
-        <div className='md:basis-2/8'>
-          <div className='border-3 mx-4 flex flex-col items-center rounded-lg py-5 bg-gray-100'>
-            <img src="imgs/icono2.jpg" alt="icono" className="w-40 bg-white border-3 rounded-full cursor-pointer" />
-            <div className='font-bold text-xl'>DanielPeregrino</div>
-            <div>Reciclador Experto</div>
-            <div className='flex flex-row'>
-            <svg class="w-6 h-6 text-yellow-400 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"/>
-            </svg>
-            <p>Nivel 5</p>
-           </div>
-          </div>
+        <div className='md:basis-2/8 mb-2'>
+          <CardPerfil user={user}/>
         </div>
         <div className='md:basis-6/8'>
-          <CambiarUser />
+          <CambiarUser user={user} />
           <CambiarPass />
         </div>
       </div>

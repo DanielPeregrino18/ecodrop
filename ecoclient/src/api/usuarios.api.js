@@ -15,3 +15,39 @@ export const getUsuario = async () => {
         throw error
     }
 }
+
+export const getUsuarioPerfil = async () => {
+    const token = localStorage.getItem("token");
+    try {
+        const response = await axios.post('http://localhost:8000/api/getusuarioperfil/',{}, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `${token}`, 
+              },
+        })
+        return response.data
+    } catch (error) {
+        console.error('Error:', error)
+        throw error
+    }
+}
+
+export const actualizarPerfil = async (nombre, telefono, password) => {
+    const token = localStorage.getItem("token");
+    try {
+        const response = await axios.put('http://localhost:8000/api/actualizarperfil/',{
+            "username":nombre,
+            "telefono":telefono,
+            "password":password
+        }, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `${token}`, 
+              },
+        })
+        return response.data.mensaje;
+    } catch (error) {
+        const errorData = JSON.parse(error.request.response);
+        throw errorData.error;
+    }
+}

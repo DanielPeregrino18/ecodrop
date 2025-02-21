@@ -7,7 +7,7 @@ import * as motion from "motion/react-client"
 
 export default function Index() {
   const navigate = useNavigate();
-  const [user, serUser] = useState({});
+  const [user, setUser] = useState({});
   const niveles = ["Novato", "Principiante", "Intermedio", "Avanzado", "Experto"];
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -19,7 +19,7 @@ export default function Index() {
   useEffect(() => {
     const fetchData = async () => {
       const data = await getUsuario();
-      serUser(data);
+      setUser(data);
     };
     fetchData();
   }, []);
@@ -33,7 +33,7 @@ export default function Index() {
           <div className='flex flex-col justify-center pl-4'>
            <p className='text-4xl font-bold text-green-800'>Bienvenido {user.username}</p>
            <div className='flex flex-row'>
-            <svg class="w-6 h-6 text-yellow-400 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+            <svg className="w-6 h-6 text-yellow-400 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"/>
             </svg>
             <p>Nivel {user.nivel} - Reciclador {niveles[user.nivel-1]}</p>
@@ -43,7 +43,7 @@ export default function Index() {
         </div>
         <div className='flex flex-col md:flex-row'>
           <div className='basis-1/2 py-4 flex-col'>
-            <div className='text-xl py-4 text-center font-bold'>Experiencia para nivel 6</div>
+            <div className='text-xl py-4 text-center font-bold'>Experiencia para nivel {user.nivel +1}</div>
             <div className="mx-6 bg-gray-200 rounded-full dark:bg-gray-700 h-5 my-4">
               <div className="bg-green-600 text-xs h-full font-medium text-green-100 text-center p-0.5 leading-none rounded-full" style={{width:(user.exp/user.metaexp*100+"%")}}> {user.exp}/{user.metaexp}</div>
             </div>
@@ -67,8 +67,8 @@ export default function Index() {
             <div className='bg-white shadow-md rounded-lg text-center mt-2 py-2 px-8 md:mx-[7.5%]'>
               <div className='font-bold text-lg'>Depositos Totales</div>
               <div className="flex justify-center"><img src="imgs/contenedor-de-basura.gif"  alt="icono" className="h-10 w-10" /></div>
-              <div className='text-start text-4xl font-bold'>51</div>
-              <div className='text-start text-gray-500'>8 depositos esta semana</div>
+              <div className='text-start text-4xl font-bold'>{user.depTotales}</div>
+              <div className='text-start text-gray-500'>{user.depSemana} depositos esta semana</div>
             </div>
 
             <div className='bg-white shadow-md rounded-lg text-center mt-2 py-2 px-8 md:mx-[7.5%]'>

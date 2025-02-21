@@ -55,11 +55,11 @@ export default function Variants() {
                         </div>
                         <div className="md:hidden">
                             <motion.div
-                                className="bg-gray-100 fixed top-0 right-0 w-full h-[100px]"
+                                className="fixed top-0 right-0 w-full h-[100px]"
                                 variants={sidebarVariants}
                             />
                             <Navigation isOpen={isOpen} />
-                            <MenuToggle toggle={() => setIsOpen(!isOpen)} />
+                            <MenuToggle isOpen={isOpen} toggle={() => setIsOpen(!isOpen)} />
                         </div>
                     </div>
                 </motion.nav>
@@ -85,7 +85,7 @@ const navVariants = {
 
 const Navigation = ({ isOpen }) => (
     <motion.ul
-        className={`list-none p-6 m-0 fixed top-0 right-0 w-full font-medium text-xl bg-gray-100 ${
+        className={`list-none z-12 p-6 m-0 fixed top-0 right-0 w-full font-medium text-xl bg-gray-100 ${
             isOpen ? 'pointer-events-auto h-[370px]' : 'pointer-events-none invisible'
         }`}
         variants={navVariants}
@@ -162,9 +162,10 @@ const Path = ({ variants, ...props }) => (
     />
 )
 
-const MenuToggle = ({ toggle }) => (
+const MenuToggle = ({ toggle , isOpen }) => (
     <button
-        className="outline-none border-none select-none cursor-pointer absolute top-[18px] right-[2px] w-[50px] h-[50px] rounded-full bg-transparent"
+        className="outline-none z-14 border-none select-none cursor-pointer absolute top-[18px] right-[2px] w-[50px] h-[50px] rounded-full bg-transparent"
+        style={isOpen ? { position: 'fixed'} : {}}
         onClick={toggle}
     >
         <svg width="23" height="23" viewBox="0 0 23 23">

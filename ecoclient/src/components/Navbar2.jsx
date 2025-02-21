@@ -18,6 +18,7 @@ export default function Nabvar2() {
 
     const handleLogout = () => {
         try {
+            console.log("print");
             localStorage.removeItem('token');
             navigate("/login");
         } catch (error) {
@@ -57,7 +58,7 @@ export default function Nabvar2() {
                             </Link>
                         </div>
 
-                        <div className="flex items-center space-x-1 sm:space-x-4">
+                        <div className="mr-2 flex items-center space-x-1 sm:space-x-4">
                             <Link to="/perfil" className="text-gray-800 hover:text-green-600 font-medium md:mx-4">
                                 Perfil
                             </Link>
@@ -67,17 +68,17 @@ export default function Nabvar2() {
                                     transition: { duration: .1 },
                                 }}
                                 onClick={handleLogout}
-                                className="px-4 py-2 text-red-600 cursor-pointer border border-red-600 rounded-full hover:bg-red-600 hover:text-white font-medium transition-colors">
+                                className="ml-1 px-1 md:px-4 py-2 text-red-600 cursor-pointer border border-red-600 rounded-full hover:bg-red-600 hover:text-white font-medium transition-colors">
                                 Cerrar sesion
                             </motion.div>
                         </div>
                         <div className="md:hidden">
                             <motion.div
-                                className="bg-gray-100 fixed top-0 right-0 w-full h-[100px]"
+                                className=" fixed top-0 right-0 w-full h-[100px]"
                                 variants={sidebarVariants}
                             />
-                            <Navigation isOpen={isOpen} />
-                            <MenuToggle toggle={() => setIsOpen(!isOpen)} />
+                            <Navigation isOpen={isOpen} handle={handleLogout} />
+                            <MenuToggle isOpen={isOpen} toggle={() => setIsOpen(!isOpen)} />
                         </div>
                     </div>
                 </motion.nav>
@@ -107,12 +108,12 @@ const Navigation = ({ isOpen }) => (
             }`}
         variants={navVariants}
     >
-        <MenuItem url={"/"} name={"Home"} />
-        <MenuItem url={"/foundation"} name={"Foundation"} />
-        <MenuItem url={"/aboutus"} name={"About Us"} />
-        <MenuItem url={"/contact"} name={"Contact"} />
-        <MenuItem url={"/login"} name={"Login"} />
-        <MenuItem url={"/registro"} name={"Registro"} />
+        <MenuItem url={"/index"} name={"Inicio"} />
+        <MenuItem url={"/foundation"} name={"Ubicaciones"} />
+        <MenuItem url={"/aboutus"} name={"Acerca de"} />
+        <MenuItem url={"/contact"} name={"Contacto"} />
+        <MenuItem url={"/perfil"} name={"Perfil"} />
+        <BtnLogout />
     </motion.ul>
 )
 
@@ -131,6 +132,31 @@ const itemVariants = {
             x: { stiffness: 1000 },
         },
     },
+}
+
+const BtnLogout = () => {
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        try {
+            localStorage.removeItem('token');
+            navigate("/login");
+        } catch (error) {
+            console.error('Error during logout:', error);
+        }
+    };
+
+    return (
+        <motion.li
+            className="flex items-center justify-center p-0 m-0 list-none mb-5 cursor-pointer hover:bg-green-600 hover:text-white"
+            variants={itemVariants}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+        >
+            <button className="" onClick={handleLogout}>
+                <div>Cerrar Sesion</div>
+            </button>
+        </motion.li>
+    )
 }
 
 const MenuItem = ({ url, name }) => {
@@ -179,9 +205,10 @@ const Path = ({ variants, ...props }) => (
     />
 )
 
-const MenuToggle = ({ toggle }) => (
+const MenuToggle = ({ toggle, isOpen }) => (
     <button
         className="outline-none border-none select-none cursor-pointer absolute top-[18px] right-[2px] w-[50px] h-[50px] rounded-full bg-transparent"
+        style={isOpen ? { position: 'fixed'} : {}}
         onClick={toggle}
     >
         <svg width="23" height="23" viewBox="0 0 23 23">

@@ -29,7 +29,7 @@ export default function Index() {
       <Navbar2 />
       <div className='px-4 py-2'>
         <div className='flex flex-row'>
-          <motion.img src="imgs/icono2.jpg" whileHover={{ scale: 1.2 }} whileTap={{ scale: 2.5 }} alt="icono" className="h-15 md:h-24 bg-white border-2 rounded-full cursor-zoom-in" />
+          <motion.img src="imgs/icono2.jpg" whileHover={{ scale: 1.2 }} whileTap={{ scale: 2.5 }} alt="icono" className="h-15 mt-4 md:mt-0 md:h-24 bg-white border-2 rounded-full cursor-zoom-in" />
           <div className='flex flex-col justify-center pl-4'>
            <p className='text-4xl font-bold text-green-800'>Bienvenido {user.username}</p>
            <div className='flex flex-row'>

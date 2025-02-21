@@ -3,6 +3,9 @@ import * as Yup from 'yup';
 import { registroApi } from '../api/login.api';
 import { toast } from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import OjoAbierto from '../components/icons/OjoAbierto'
+import OjoCerrado from '../components/icons/OjoCerrado'
 
 const SignupSchema = Yup.object().shape({
     password: Yup.string()
@@ -25,6 +28,7 @@ const SignupSchema = Yup.object().shape({
 
 export default function RegistroForm({ setIsAuthenticate }) {
     const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState([false, false]);
     return (
         <>
             <div className="flex md:flex-row">
@@ -34,7 +38,7 @@ export default function RegistroForm({ setIsAuthenticate }) {
                             <img className="w-8 h-8 mr-2" src="imgs/LogoBco2.jpeg" alt="logo" />
                             Ecodrop
                         </a>
-                        <div className="px-6 space-y-4 md:space-y-6 sm:px-8 sm:pb-3">
+                        <div className="px-6 py-3 space-y-4 md:space-y-6 sm:px-8 sm:pb-3">
                             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                                 Crea tu cuenta
                             </h1>
@@ -75,14 +79,26 @@ export default function RegistroForm({ setIsAuthenticate }) {
                                         </div>
                                         <div>
                                             <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contraseña</label>
-                                            <Field type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
+                                            <div className='relative z-10 w-full'>
+                                                <Field type={showPassword[0] ? "text" : "password"} name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
+                                                <button type="button" className="absolute inset-y-0 right-0 px-3 flex items-center"
+                                                    onClick={() => setShowPassword(prev => prev.map((value, index) => index === 0 ? !value : value))}>
+                                                    {showPassword[0] ? (<OjoAbierto />) : (<OjoCerrado />)}
+                                                </button>
+                                            </div>
                                             {errors.password && touched.password && (
                                                 <div className='text-[9px] text-red-600'>{errors.password}</div>
                                             )}
                                         </div>
                                         <div>
                                             <label htmlFor="passwordConf" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirma tu contraseña</label>
-                                            <Field type="password" name="passwordConf" id="passwordConf" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
+                                            <div className='relative w-full'>
+                                                <Field type={showPassword[1] ? "text" : "password"} name="passwordConf" id="passwordConf" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
+                                                <button type="button" className="absolute inset-y-0 right-0 px-3 flex items-center"
+                                                    onClick={() => setShowPassword(prev => prev.map((value, index) => index === 1 ? !value : value))}>
+                                                    {showPassword[1] ? (<OjoAbierto />) : (<OjoCerrado />)}
+                                                </button>
+                                            </div>
                                             {errors.passwordConf && touched.passwordConf && (
                                                 <div className='text-[9px] text-red-600'>{errors.passwordConf}</div>
                                             )}
@@ -115,55 +131,3 @@ export default function RegistroForm({ setIsAuthenticate }) {
         </>
     );
 }
-
-/*
-<Formik
-                initialValues={{
-                    password: '',
-                    email: '',
-                    name: '',
-                    passwordConf: '',
-                }}
-                validationSchema={SignupSchema}
-                onSubmit={async(values) => { 
-                        const res = await registroApi(values.name, values.email, values.password);
-                        if(res==="exito"){
-                            navigate("/index")
-                        }else{
-                            toast.error(res.error); 
-                        }
-                    }
-                    }>
-
-                {({ errors, touched }) => (
-                    <div className='h-full'>
-                        <Form className='flex flex-col h-full justify-around'>
-                            <div>
-                                <Field className="w-full rounded border border-black p-2" name="name" placeholder="Ingresa tu nombre" />
-                                {errors.name && touched.name && (
-                                    <div className='text-[9px] text-red-600'>{errors.name}</div>
-                                )}
-                            </div>
-                            <div>
-                                <Field className='w-full rounded border border-black p-2' type="email" name="email" placeholder="Ingresa tu email" />
-                                {errors.email && touched.email && (
-                                    <div className='text-[9px] text-red-600'>{errors.email}</div>
-                                )}
-                            </div>
-                            <div>
-                                <Field className="w-full rounded border border-black p-2" type="password" name="password" placeholder="Ingresa tu contraseña" />
-                                {errors.password && touched.password && (
-                                    <div className='text-[9px] text-red-600'>{errors.password}</div>
-                                )}
-                            </div>
-                            <div>
-                                <Field className="w-full rounded border border-black p-2" type="password" name="passwordConf" placeholder="Confirma tu contraseña" />
-                                {errors.passwordConf && touched.passwordConf && (
-                                    <div className='text-[9px] text-red-600'>{errors.passwordConf}</div>
-                                )}
-                            </div>
-                            <button type='submit' className='border border-black p-2 rounded bg-sky-400 hover:bg-sky-600'>submit</button>
-                        </Form>
-                    </div>
-                )}
-            </Formik>*/

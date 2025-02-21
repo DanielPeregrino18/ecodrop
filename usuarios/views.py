@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
-from .models import getUserByEmail, registrarUsuario, getUsuarioById, getUsuarioPerfilbyId, actPerfil, validarPassword
+from .models import getUserByEmail, registrarUsuario, getUsuarioById, getUsuarioPerfilbyId, actPerfil, validarPassword, actPass
 import bcrypt
 from .tokens import token_required, generate_token
 
@@ -87,7 +87,16 @@ def actualizarPerfil(request):
            return Response({"mensaje":"Usuario actuallizado correctamente"}, status=status.HTTP_200_OK)
        return Response({"error":"No se pudo actualizar la información"}, status=status.HTTP_400_BAD_REQUEST)
     return Response({"error":"La contraseña es incorrecta"}, status=status.HTTP_401_UNAUTHORIZED)
-    #user = getUsuarioPerfilbyId(user_id)
-
     
-
+@api_view(['PUT'])
+@token_required
+def actualizarPassword(request):
+    user_id = request.token_payload.get('user_id')
+    datos = request.data
+    if validarPassword(user_id, datos.get('oldPassword')):
+        if datos.get('oldPassword') !=  datos.get('newPassword'):
+            if actPass(user_id, datos.get('newPassword')):
+                return Response({"mensaje":"Contraseña actualizada correctamente"}, status=status.HTTP_200_OK)
+            return Response({"error":"No se pudo actualizar la información"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error":"La contraseña nueva no puede ser igual a la anterior"}, status=status.HTTP_400_BAD_REQUEST)
+    return Response({"error":"La contraseña es incorrecta"}, status=status.HTTP_401_UNAUTHORIZED)

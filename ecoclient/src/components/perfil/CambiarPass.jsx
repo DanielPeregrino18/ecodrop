@@ -3,7 +3,8 @@ import OjoCerrado from '../icons/OjoCerrado';
 import OjoAbierto from '../icons/OjoAbierto';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-
+import { actualizarPassword } from '../../api/usuarios.api'
+import { toast } from 'react-hot-toast'
 
 export default function CambiarPass() {
     const [showPassword, setShowPassword] = useState([false, false, false]);
@@ -28,7 +29,14 @@ export default function CambiarPass() {
                     oldPassword: ''
                 }}
                 validationSchema={editPassSquema}
-                onSubmit={() => { }}
+                onSubmit={async (values) => {
+                    try{
+                        var mensaje = await actualizarPassword(values.newPassword, values.oldPassword);
+                        toast.success(mensaje);
+                    }catch(error){
+                        toast.error(error);
+                    }
+                }}
             >
                 {({ errors, touched }) => (
                     <Form className='w-full' >
@@ -73,7 +81,7 @@ export default function CambiarPass() {
                                 <div className='text-[9px] text-red-600'>{errors.oldPassword}</div>
                             )}
                         </div>
-                        <button type="button" className="w-[100%] mt-2 cursor-pointer focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Cambiar username</button>
+                        <button type="submit" className="w-[100%] mt-2 cursor-pointer focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Cambiar password</button>
                     </Form>
                 )}
             </Formik>

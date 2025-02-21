@@ -77,7 +77,31 @@ def actPerfil(id, username, telefono):
     except Exception as e:
         return False
 
+#actualizar contraseña
+def actPass(id, password):
+    try:
+        salt = bcrypt.gensalt()
+        miColeccion.update_one(
+            {'_id': ObjectId(id)},
+            {
+                '$set': {
+                    'password': bcrypt.hashpw(password.encode('utf-8'), salt),
+                }
+            }
+        )
+        return True
+    except Exception as e:
+        print("error: ")
+        return False
     
+def validarPassword(id, password):
+    user = miColeccion.find_one({'_id': ObjectId(id)})
+    hashed_password = user.get('password')
+    password_matches = bcrypt.checkpw(
+            password.encode('utf-8'), 
+            hashed_password
+        )
+    return password_matches
 
 #puede que se mueva a otra aplicacion
 def agregarDeposito(usuario_id, material):
@@ -108,11 +132,5 @@ def agregarDeposito(usuario_id, material):
         print(f"Error al agregar depósito: {str(e)}")
         return False
     
-def validarPassword(id, password):
-    user = miColeccion.find_one({'_id': ObjectId(id)})
-    hashed_password = user.get('password')
-    password_matches = bcrypt.checkpw(
-            password.encode('utf-8'), 
-            hashed_password
-        )
-    return password_matches
+
+

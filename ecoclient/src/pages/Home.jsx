@@ -1,7 +1,6 @@
 import NavbarI from '../components/NavbarI';
 import * as motion from "motion/react-client"
 import Home1 from '../components/home/home1';
-import Contador from '../components/home/Contador';
 import Home2 from '../components/home/Home2';
 
 export default function Home() {

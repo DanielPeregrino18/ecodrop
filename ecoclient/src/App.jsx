@@ -8,6 +8,8 @@ import Index from './pages/Index';
 import Home from './pages/Home';
 import Perfil from './pages/Perfil';
 import Footer from './components/Footer';
+import NotFound from './pages/NotFound';
+import NotFoundAuth from './pages/NotFoundAuth';
 
 function App() {
   const [isAuthenticated, setIsAuthenticate ]= useState(Boolean(localStorage.getItem('token')));
@@ -15,6 +17,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path='*' element={isAuthenticated ? <NotFoundAuth /> : <NotFound />} />
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login setIsAuthenticate={setIsAuthenticate} />} />
         <Route path='/registro' element={<Registro setIsAuthenticate={setIsAuthenticate} />} />

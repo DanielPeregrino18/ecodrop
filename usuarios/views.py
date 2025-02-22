@@ -100,3 +100,7 @@ def actualizarPassword(request):
             return Response({"error":"No se pudo actualizar la información"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"error":"La contraseña nueva no puede ser igual a la anterior"}, status=status.HTTP_400_BAD_REQUEST)
     return Response({"error":"La contraseña es incorrecta"}, status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view(['GET'])
+def prueba(request):
+    return Response({"mensaje":"Todo bien pariente"}, status=status.HTTP_200_OK)

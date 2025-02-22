@@ -124,8 +124,8 @@ export default function RegistroForm({ setIsAuthenticate }) {
                         </div>
                     </div>
                 </div>
-                <div className='basis-1/2 flex-col items-center justify-center hidden md:flex rounded-lg shadow-lg' style={{ backgroundColor: "#16b6c6" }}>
-                    <img src="imgs/loginImg.gif" className='' />
+                <div className='basis-1/2 flex-col items-center justify-center hidden md:flex rounded-lg shadow-lg' style={{ backgroundColor: "#16bf7f" }}>
+                    <img src="imgs/registroImg.gif" className='' />
                 </div>
             </div>
         </>

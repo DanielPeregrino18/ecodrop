@@ -3,7 +3,7 @@ import axios from 'axios'
 export const getUsuario = async () => {
     const token = localStorage.getItem("token");
     try {
-        const response = await axios.post('http://localhost:8000/api/getusuario/',{}, {
+        const response = await axios.post('https://ecodrop.onrender.com/api/getusuario/',{}, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `${token}`, 
@@ -19,7 +19,7 @@ export const getUsuario = async () => {
 export const getUsuarioPerfil = async () => {
     const token = localStorage.getItem("token");
     try {
-        const response = await axios.post('http://localhost:8000/api/getusuarioperfil/',{}, {
+        const response = await axios.post('https://ecodrop.onrender.com/api/getusuarioperfil/',{}, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `${token}`, 
@@ -35,7 +35,7 @@ export const getUsuarioPerfil = async () => {
 export const actualizarPerfil = async (nombre, telefono, password) => {
     const token = localStorage.getItem("token");
     try {
-        const response = await axios.put('http://localhost:8000/api/actualizarperfil/',{
+        const response = await axios.put('https://ecodrop.onrender.com/api/actualizarperfil/',{
             "username":nombre,
             "telefono":telefono,
             "password":password
@@ -55,7 +55,7 @@ export const actualizarPerfil = async (nombre, telefono, password) => {
 export const actualizarPassword = async (newPassword, oldPassword) => {
     const token = localStorage.getItem("token");
     try {
-        const response = await axios.put('http://localhost:8000/api/actualizarpass/',{
+        const response = await axios.put('https://ecodrop.onrender.com/api/actualizarpass/',{
             "newPassword":newPassword,
             "oldPassword":oldPassword
         }, {

@@ -2,7 +2,7 @@ import axios  from "axios";
 
 export const loginApi = async (email, password) => {
     try {
-        const response = await axios.post('http://localhost:8000/api/login/', {
+        const response = await axios.post('https://ecodrop.onrender.com/api/login/', {
             email,
             password
         });
@@ -24,7 +24,7 @@ export const loginApi = async (email, password) => {
 
 export const registroApi = async (nombre, email, password) => {
     try {
-        const response = await axios.post('http://localhost:8000/api/registro/', {
+        const response = await axios.post('https://ecodrop.onrender.com/api/registro/', {
             email: email,
             username: nombre,
             password: password

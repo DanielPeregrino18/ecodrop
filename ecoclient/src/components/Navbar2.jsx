@@ -18,7 +18,6 @@ export default function Nabvar2() {
 
     const handleLogout = () => {
         try {
-            console.log("print");
             localStorage.removeItem('token');
             navigate("/login");
         } catch (error) {

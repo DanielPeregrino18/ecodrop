@@ -24,4 +24,5 @@ urlpatterns = [
     #re_path('register', views.register),
     #re_path('profile', views.profile),
     path('api/', include('usuarios.urls')),
+    path('apimaq/', include('maquinas.urls')),
 ]

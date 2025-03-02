@@ -103,4 +103,4 @@ def actualizarPassword(request):
 
 @api_view(['GET'])
 def prueba(request):
-    return Response({"mensaje":"Todo bien pariente"}, status=status.HTTP_200_OK)
+    return Response({"mensaje":""}, status=status.HTTP_200_OK)

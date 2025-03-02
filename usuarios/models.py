@@ -1,4 +1,3 @@
-from django.db import models
 from db_con import db
 from bson import ObjectId
 from datetime import datetime, timedelta, timezone

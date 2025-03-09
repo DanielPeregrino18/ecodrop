@@ -33,7 +33,7 @@ def token_required(f):
             return JsonResponse({'message': 'Token faltante'}, status=401)
             
         try:
-            # Eliminar 'Bearer ' si está presente
+
             if token.startswith('Bearer '):
                 token = token[7:]
                 
@@ -41,7 +41,7 @@ def token_required(f):
             if payload is None:
                 return JsonResponse({'message': 'Token inválido'}, status=401)
                 
-            # Agregar el payload al request para uso posterior
+    
             request.token_payload = payload
             
         except Exception as e:

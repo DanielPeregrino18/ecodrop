@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
-from .models import getUserByEmail, registrarUsuario, getUsuarioById, getUsuarioPerfilbyId, actPerfil, validarPassword, actPass
+from .models import getUserByEmail, registrarUsuario, getUsuarioById, getUsuarioPerfilbyId, actPerfil, validarPassword, actPass,getLogrosUsuario
 import bcrypt
 from .tokens import token_required, generate_token
 
@@ -51,6 +51,7 @@ def registro(request):
     usuario['exp'] = 0
     usuario['metaexp'] = 10
     usuario['historial'] = []
+    usuario['logros'] = []
     usuario['telefono'] = ''
     try:
         res = registrarUsuario(usuario)
@@ -102,5 +103,8 @@ def actualizarPassword(request):
     return Response({"error":"La contraseña es incorrecta"}, status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['GET'])
-def prueba(request):
-    return Response({"mensaje":"1"}, status=status.HTTP_200_OK)
+@token_required
+def logrosObt(request):
+    user_id = request.token_payload.get('user_id')
+    res = getLogrosUsuario(user_id)
+    return Response(res, status=status.HTTP_200_OK)

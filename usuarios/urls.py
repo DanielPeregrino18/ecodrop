@@ -8,5 +8,5 @@ urlpatterns = [
     path('getusuarioperfil/', views.getUsuarioPerfil, name='getusuarioperfil'), #post
     path('actualizarperfil/', views.actualizarPerfil, name='actualizarperfil'), #put
     path('actualizarpass/', views.actualizarPassword, name='actualizarpass'), #put
-    path('prueba/', views.prueba, name='prueba'), #get
+    path('logrosobtenidos/', views.logrosObt, name='logrosobtenidos'), #get
 ]

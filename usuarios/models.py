@@ -5,7 +5,7 @@ from dateutil.parser import parse
 import bcrypt
 
 miColeccion = db["usuarios"]
-
+logrosDB = db["logros"]
 def getUserByEmail(email):
     mongo_user = miColeccion.find_one({"email": email})
     if not mongo_user:
@@ -131,5 +131,19 @@ def agregarDeposito(usuario_id, material):
         print(f"Error al agregar depósito: {str(e)}")
         return False
     
+
+def getLogrosUsuario(id):
+    user = getUsuarioById(id)
+    logrosObtenidosIds = user.get("logros", [])
+
+    logrosObtenidos = list(logrosDB.find({'_id': {'$in': logrosObtenidosIds}}))
+    logrosNoObtenidos = list(logrosDB.find({'_id': {'$nin': logrosObtenidosIds}}))
+    
+    resultado = {
+        "obtenidos": logrosObtenidos,
+        "no_obtenidos": logrosNoObtenidos,
+    }
+    
+    return resultado
 
 

@@ -19,6 +19,26 @@ def getMetodo(id):
          )
     return res
 
+def setMetodo(id, material):
+    metodo = 0
+    if material == "plastic":
+        metodo = 1
+    elif material == "metal":
+        metodo = 2
+    else:
+        metodo = 3
+    try:
+        maquinas.update_one(
+            {'_id': ObjectId(id)},
+            {
+                '$set': {
+                    'metodo': metodo,
+                }
+            } 
+        )
+        return True
+    except Exception as e:
+        return False
 
 #lo manejara desde la app movil
 def modificarEscanear(id):

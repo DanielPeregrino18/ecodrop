@@ -139,11 +139,17 @@ def getLogrosUsuario(id):
     logrosObtenidos = list(logrosDB.find({'_id': {'$in': logrosObtenidosIds}}))
     logrosNoObtenidos = list(logrosDB.find({'_id': {'$nin': logrosObtenidosIds}}))
     
-    resultado = {
+    for logro in logrosObtenidos:
+        logro["tipo"] = "obtenido"
+    
+    for logro in logrosNoObtenidos:
+        logro["tipo"] = "no obtenido"
+
+    res = {
         "obtenidos": logrosObtenidos,
         "no_obtenidos": logrosNoObtenidos,
     }
     
-    return resultado
+    return res
 
 

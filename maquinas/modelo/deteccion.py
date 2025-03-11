@@ -6,7 +6,7 @@ import numpy as np
 
 def detectarObjeto(image):
     model_path = os.path.join(os.path.dirname(__file__), "../modelo/best.pt")
-    confidence_threshold=0.7
+    confidence_threshold=0.5
     try:
         model = YOLO(model_path)
     except Exception as e:

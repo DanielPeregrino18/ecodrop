@@ -152,4 +152,12 @@ def getLogrosUsuario(id):
     
     return res
 
-
+def cambiarIconoDB(id , icono):
+     miColeccion.update_one(
+            {'_id': ObjectId(id)},
+            {
+                '$set': {
+                    'icono': icono ,
+                }
+            }
+        )

@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
-from .models import getUserByEmail, registrarUsuario, getUsuarioById, getUsuarioPerfilbyId, actPerfil, validarPassword, actPass,getLogrosUsuario
+from .models import getUserByEmail, registrarUsuario, getUsuarioById, getUsuarioPerfilbyId, actPerfil, validarPassword, actPass, getLogrosUsuario, cambiarIconoDB
 import bcrypt
 from .tokens import token_required, generate_token
 
@@ -108,3 +108,14 @@ def logrosObt(request):
     user_id = request.token_payload.get('user_id')
     res = getLogrosUsuario(user_id)
     return Response(res, status=status.HTTP_200_OK)
+
+@api_view(['PUT'])
+@token_required
+def cambiarIcono(request):
+    user_id = request.token_payload.get('user_id')
+    isModificado = cambiarIconoDB(user_id, request.data.get("icono"))
+    if isModificado:
+         return Response({"Modificado":True}, status=status.HTTP_200_OK)
+    else:
+         return Response({"Modificado":False}, status=status.HTTP_400_BAD_REQUEST)
+    

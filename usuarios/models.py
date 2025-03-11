@@ -153,11 +153,15 @@ def getLogrosUsuario(id):
     return res
 
 def cambiarIconoDB(id , icono):
-     miColeccion.update_one(
-            {'_id': ObjectId(id)},
-            {
-                '$set': {
-                    'icono': icono ,
+    try:
+        miColeccion.update_one(
+                {'_id': ObjectId(id)},
+                {
+                    '$set': {
+                        'icono': icono ,
+                    }
                 }
-            }
-        )
+            )
+        return True
+    except Exception as e:
+        return False

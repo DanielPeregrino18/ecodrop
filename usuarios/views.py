@@ -117,5 +117,5 @@ def cambiarIcono(request):
     if isModificado:
          return Response({"Modificado":True}, status=status.HTTP_200_OK)
     else:
-         return Response({"Modificado":False}, status=status.HTTP_400_BAD_REQUEST)
+         return Response({"Modificado":False}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     

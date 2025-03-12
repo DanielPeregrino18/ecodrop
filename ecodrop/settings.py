@@ -130,4 +130,4 @@ if not DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:5173", "https://ecoclient-3uq6.onrender.com"]
+CORS_ALLOWED_ORIGINS = True#["http://localhost:5173", "https://ecoclient-3uq6.onrender.com"]

@@ -38,10 +38,21 @@ def getUsuarioById(id):
     if 'historial' in usuario:
         for deposito in usuario['historial']:
             try:
-                fecha_str = deposito['fecha']['$date']
-                fecha_str = fecha_str.rstrip('Z')
-                fecha_deposito = parse(fecha_str).astimezone(timezone.utc)
-                if fecha_deposito >= inicio_semana:
+                fecha_deposito = None
+                if isinstance(deposito['fecha'], datetime):
+                    fecha_deposito = deposito['fecha']
+                    if fecha_deposito.tzinfo is None:
+                        fecha_deposito = fecha_deposito.replace(tzinfo=timezone.utc)
+                elif isinstance(deposito['fecha'], dict) and '$date' in deposito['fecha']:
+                    fecha_str = deposito['fecha']['$date']
+                    fecha_str = fecha_str.rstrip('Z')
+                    fecha_deposito = parse(fecha_str)
+                    if fecha_deposito.tzinfo is None:
+                        fecha_deposito = fecha_deposito.replace(tzinfo=timezone.utc)
+                    else:
+                        fecha_deposito = fecha_deposito.astimezone(timezone.utc)
+                
+                if fecha_deposito and fecha_deposito >= inicio_semana:
                     depositos_semana += 1
             except (KeyError, ValueError, TypeError) as e:
                 print(f"Error procesando fecha: {e}")

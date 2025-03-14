@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
-from .models import getUserByEmail, registrarUsuario, getUsuarioById, getUsuarioPerfilbyId, actPerfil, validarPassword, actPass, getLogrosUsuario, cambiarIconoDB
+from .models import getUserByEmail, registrarUsuario, getUsuarioById, getUsuarioPerfilbyId, actPerfil, validarPassword, actPass, getLogrosUsuario, cambiarIconoDB, getAllUsuarios
 import bcrypt
 from .tokens import token_required, generate_token
 
@@ -118,4 +118,10 @@ def cambiarIcono(request):
          return Response({"Modificado":True}, status=status.HTTP_200_OK)
     else:
          return Response({"Modificado":False}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['GET'])
+@token_required
+def getTopUsuarios(request):
+    res = getAllUsuarios()
+    return Response({"usuarios":res}, status=status.HTTP_200_OK)
     

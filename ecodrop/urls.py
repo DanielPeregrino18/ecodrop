@@ -25,4 +25,5 @@ urlpatterns = [
     #re_path('profile', views.profile),
     path('api/', include('usuarios.urls')),
     path('api/maquinas/', include('maquinas.urls')),
+    path('api/administrador/', include('administrador.urls')),
 ]

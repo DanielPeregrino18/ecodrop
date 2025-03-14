@@ -176,3 +176,19 @@ def cambiarIconoDB(id , icono):
         return True
     except Exception as e:
         return False
+    
+    
+def getAllUsuarios():
+    campos = {
+        "username": 1,
+        "saldo": 1,
+        "racha": 1, 
+        "exp": 1,
+        "icono": 1,
+        "email": 1,
+        "_id": 0  
+    }
+    
+    lista_usuarios = list(miColeccion.find({}, campos).sort("exp", -1).limit(5))
+    
+    return lista_usuarios

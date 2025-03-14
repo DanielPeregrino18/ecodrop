@@ -10,4 +10,5 @@ urlpatterns = [
     path('actualizarpass/', views.actualizarPassword, name='actualizarpass'), #put
     path('logrosobtenidos/', views.logrosObt, name='logrosobtenidos'), #get
     path('cambiarIcono/', views.cambiarIcono, name='cambiarIcono'), #put
+    path('getTopUsuarios/', views.getTopUsuarios, name='getTopUsuarios'), #put
 ]

@@ -1,7 +1,8 @@
 from django.db import models
 from db_con import db
 from bson import ObjectId
-
+from usuarios.models import agregarDep
+from administrador.models import actualizarEstadisticas
 maquinas = db["maquinas"]
 
 # ingresar imagen y clasificar, modificar el metodo dependiendo el objeto
@@ -19,7 +20,10 @@ def getMetodo(id):
          )
     return res
 
+#agrega el metodo y suma puntos y experiencia
 def setMetodo(id, material):
+   
+    maquina = maquinas.find_one({'_id': ObjectId(id)})
     metodo = 0
     if material == "plastic":
         metodo = 1
@@ -36,6 +40,9 @@ def setMetodo(id, material):
                 }
             } 
         )
+        idUser = maquina['idLastUser']
+        agregarDep(idUser, material)
+        actualizarEstadisticas(material)
         return True
     except Exception as e:
         return False

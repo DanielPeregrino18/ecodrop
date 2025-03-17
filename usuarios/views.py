@@ -53,6 +53,8 @@ def registro(request):
     usuario['historial'] = []
     usuario['logros'] = []
     usuario['telefono'] = ''
+    usuario['icono'] = "imgs/iconos/semilla.png"
+    usuario['admin'] = False
     try:
         res = registrarUsuario(usuario)
         return Response({

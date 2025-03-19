@@ -40,8 +40,6 @@ def vincularUser(request):
 @parser_classes([JSONParser, FormParser, MultiPartParser, FileUploadParser])
 def setImage(request):
     id = '67c3b38a037f576fd63aa26f'
-    """
-  
     image = None
     if request.content_type and 'image/' in request.content_type:
         try:
@@ -57,10 +55,9 @@ def setImage(request):
     from maquinas.modelo.deteccion import detectarObjeto
 
     res = detectarObjeto(image=image)
-    """
-    #if not res:
-    setMetodo(id,"plastic")
-    #else:
-     #   setMetodo(id,material=res[0].get("class"))
-    return Response({'message': 'Imagen obtenida correctamente', 'class': "paper"},# res[0].get("class")}, 
+    if not res:
+        respuesta = "nada" #setMetodo(id,"plastic")
+    else:
+        respuesta = res[0].get("class")#setMetodo(id,material=res[0].get("class"))
+    return Response({'message': 'Imagen obtenida correctamente', 'class': respuesta},# res[0].get("class")}, 
                   status=status.HTTP_201_CREATED)

@@ -56,8 +56,10 @@ def setImage(request):
 
     res = detectarObjeto(image=image)
     if not res:
-        respuesta = "nada" #setMetodo(id,"plastic")
+        respuesta = "paper" 
+        setMetodo(id,"paper")
     else:
         respuesta = res[0].get("class")#setMetodo(id,material=res[0].get("class"))
+        setMetodo(id,respuesta)
     return Response({'message': 'Imagen obtenida correctamente', 'class': respuesta},# res[0].get("class")}, 
                   status=status.HTTP_201_CREATED)

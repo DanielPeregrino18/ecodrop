@@ -58,7 +58,7 @@ def getUsuarioById(id):
             except (KeyError, ValueError, TypeError) as e:
                 print(f"Error procesando fecha: {e}")
                 continue
-
+    usuario['historial'] = list(reversed(usuario['historial']))
     usuario['depTotales'] = total_depositos
     usuario['depSemana'] = depositos_semana
 

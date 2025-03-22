@@ -51,9 +51,9 @@ def registro(request):
     usuario['exp'] = 0
     usuario['metaexp'] = 10
     usuario['historial'] = []
-    usuario['logros'] = []
+    usuario['logros'] = ["creacionCuenta","gratisdos","gratistres"]
     usuario['telefono'] = ''
-    usuario['icono'] = "imgs/iconos/semilla.png"
+    usuario['icono'] = "ecoIcon.png"
     usuario['admin'] = False
     try:
         res = registrarUsuario(usuario)

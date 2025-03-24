@@ -36,7 +36,7 @@ def setMetodo(id, material):
             {'_id': ObjectId(id)},
             {
                 '$set': {
-                    'metodo': metodo,
+                    'metodo': str(metodo),
                 }
             } 
         )

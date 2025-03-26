@@ -35,12 +35,13 @@ def vincularUser(request):
     vincularUsuario(datos.get('idMaquina'), user_id)
     return Response({'message': 'Usuario vinculado'}, status=status.HTTP_201_CREATED)
 
-
 @api_view(['POST'])
 @parser_classes([JSONParser, FormParser, MultiPartParser, FileUploadParser])
 def setImage(request):
     id = '67c3b38a037f576fd63aa26f'
     image = None
+    
+    # Manejo de diferentes tipos de carga de imagen
     if request.content_type and 'image/' in request.content_type:
         try:
             image = ContentFile(request.body, name='esp32_image.jpg')
@@ -49,17 +50,28 @@ def setImage(request):
                           status=status.HTTP_400_BAD_REQUEST)
     elif 'image' in request.FILES:
         image = request.FILES['image']
+    
+    # Validación de imagen
     if not image:
         return Response({'error': 'No image provided or unsupported format'}, 
                       status=status.HTTP_400_BAD_REQUEST)
+    
     from maquinas.modelo.deteccion import detectarObjeto
 
-    res = detectarObjeto(image=image)
+    # La función detectarObjeto ahora devuelve una tupla (detections, message)
+    res, message = detectarObjeto(image=image)
+    
+    # Manejo de detecciones
     if not res:
-        respuesta = "paper" 
-        setMetodo(id,"paper")
+        # Si no hay detecciones, usar "paper" por defecto
+        respuesta = "paper"
+        setMetodo(id, "paper")
     else:
-        respuesta = res[0].get("class")#setMetodo(id,material=res[0].get("class"))
-        setMetodo(id,respuesta)
-    return Response({'message': 'Imagen obtenida correctamente', 'class': respuesta},# res[0].get("class")}, 
-                  status=status.HTTP_201_CREATED)
+        # Tomar la primera detección directamente
+        respuesta = res[0]["class"]
+        setMetodo(id, respuesta)
+    
+    return Response({
+        'message': message or 'Imagen obtenida correctamente', 
+        'class': respuesta
+    }, status=status.HTTP_201_CREATED)

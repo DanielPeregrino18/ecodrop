@@ -1,12 +1,49 @@
-from ultralytics import YOLO
-import cv2
-import argparse
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.parsers import MultiPartParser, FormParser
 import os
+import cv2
 import numpy as np
+from ultralytics import YOLO
+
+class SetImageView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
+    def post(self, request):
+        try:
+            image = request.FILES.get('imagen')
+            if not image:
+                return Response({"error": "No se proporcionó imagen"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            # La función detectarObjeto ahora devuelve una tupla (detections, message)
+            detections, message = detectarObjeto(image=image)
+            
+            # Si no hay detecciones, devolver un mensaje apropiado
+            if not detections:
+                return Response({
+                    "message": "No se detectaron objetos",
+                    "detections": []
+                }, status=status.HTTP_200_OK)
+            
+            # Si hay detecciones, procesar el primer objeto
+            first_detection = detections[0]
+            
+            return Response({
+                "message": message,
+                "class": first_detection["class"],
+                "confidence": first_detection["confidence"]
+            }, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({
+                "error": str(e)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 def detectarObjeto(image):
     model_path = os.path.join(os.path.dirname(__file__), "../modelo/best.pt")
-    confidence_threshold=0.4
+    confidence_threshold = 0.4
+    
     try:
         model = YOLO(model_path)
     except Exception as e:
@@ -22,14 +59,11 @@ def detectarObjeto(image):
         return None, f"Error durante la detección: {str(e)}"
     
     detections = []
-    annotated_image = img_array.copy()
     
     if results[0].boxes.conf is not None and len(results[0].boxes.conf) > 0:
         high_conf_mask = results[0].boxes.conf > confidence_threshold
         
         if high_conf_mask.any():
-            annotated_image = results[0].plot()
-            
             for box, conf, cls in zip(
                 results[0].boxes.xyxy[high_conf_mask].cpu().numpy(), 
                 results[0].boxes.conf[high_conf_mask].cpu().numpy(),
@@ -49,4 +83,6 @@ def detectarObjeto(image):
         for i, det in enumerate(detections, 1):
             result_message += f"\n{i}. {det['class']} (confianza: {det['confidence']:.2f})"
     
-    return detections#annotated_image, result_message, detections
+    print(detections)
+    
+    return detections, result_message

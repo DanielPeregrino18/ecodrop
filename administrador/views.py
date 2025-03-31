@@ -11,7 +11,7 @@ def getEstadisticas(request):
     user_id = request.token_payload.get('user_id')
     if verificarAdministrador(user_id):
         res = obtenerEstadisticas()
-        dist = obtenerDistancia
+        dist = obtenerDistancia()
         return Response({'estadisticas': res, 'distancia': dist}, status=status.HTTP_201_CREATED)
     else:
         return Response({'message': 'El usuario no es administrador'}, status=status.HTTP_401_UNAUTHORIZED)

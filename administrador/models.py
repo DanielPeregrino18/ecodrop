@@ -5,7 +5,7 @@ import datetime
 import pytz
 
 estadisticas = db['estadisticas']
-
+maquinas = db['maquinas']
 def verificarAdministrador(id):
     user = getUsuarioById(id)
     return user.get('admin')
@@ -13,6 +13,11 @@ def verificarAdministrador(id):
 def obtenerEstadisticas():
     result = list(estadisticas.find({}))
     return convert_objectid(result) 
+
+def obtenerDistancia():
+    maquina = maquinas.find_one({'_id': ObjectId('67c3b38a037f576fd63aa26f')})
+    return maquina['distancia']
+
 
 def convert_objectid(data):
     if isinstance(data, ObjectId):

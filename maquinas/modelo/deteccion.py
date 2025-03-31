@@ -130,7 +130,7 @@ class SetImageView(APIView):
 
 def clasificarImagen(image):
     model_path = os.path.join(os.path.dirname(__file__), "../modelo/best929.pt")
-    confidence_threshold = 0.52
+    confidence_threshold = 0.45
     
     try:
         model = YOLO(model_path)

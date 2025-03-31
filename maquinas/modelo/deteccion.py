@@ -1,4 +1,4 @@
-from rest_framework.views import APIView
+"""from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -85,4 +85,95 @@ def detectarObjeto(image):
     
     print(detections)
     
-    return detections, result_message
+    return detections, result_message"""
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.parsers import MultiPartParser, FormParser
+import os
+import cv2
+import numpy as np
+from ultralytics import YOLO
+
+class SetImageView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
+    def post(self, request):
+        try:
+            image = request.FILES.get('imagen')
+            if not image:
+                return Response({"error": "No se proporcionó imagen"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            # La función clasificarImagen ahora devuelve una tupla (predictions, message)
+            predictions, message = clasificarImagen(image=image)
+            
+            # Si no hay predicciones, devolver un mensaje apropiado
+            if not predictions:
+                return Response({
+                    "message": "No se pudo clasificar la imagen",
+                    "predictions": []
+                }, status=status.HTTP_200_OK)
+            
+            # Si hay predicciones, procesar la primera (la de mayor confianza)
+            first_prediction = predictions[0]
+            
+            return Response({
+                "message": message,
+                "class": first_prediction["class"],
+                "confidence": first_prediction["confidence"]
+            }, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({
+                "error": str(e)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+def clasificarImagen(image):
+    model_path = os.path.join(os.path.dirname(__file__), "../modelo/best.pt")
+    confidence_threshold = 0.52
+    
+    try:
+        model = YOLO(model_path)
+    except Exception as e:
+        return None, f"Error al cargar el modelo: {str(e)}"
+    
+    img_array = cv2.imdecode(np.frombuffer(image.read(), np.uint8), cv2.IMREAD_COLOR)
+    if not isinstance(img_array, np.ndarray):
+        return None, "Error: La imagen proporcionada no es válida."
+    
+    try:
+        # Para modelos de clasificación, usa el parámetro task
+        results = model(img_array, task='classify')
+    except Exception as e:
+        return None, f"Error durante la clasificación: {str(e)}"
+    
+    predictions = []
+    
+    # La estructura de resultados es diferente para tareas de clasificación
+    if len(results) > 0 and hasattr(results[0], 'probs'):
+        # Obtener las probabilidades
+        probs = results[0].probs
+        
+        # Obtener las clases con mayor confianza
+        top_indices = probs.top5
+        top_confs = probs.top5conf.cpu().numpy()
+        
+        for idx, conf in zip(top_indices, top_confs):
+            if conf > confidence_threshold:
+                class_name = results[0].names[int(idx)]
+                predictions.append({
+                    "class": class_name,
+                    "confidence": float(conf)
+                    # No hay bbox en clasificación
+                })
+    
+    if not predictions:
+        result_message = "No se pudo clasificar la imagen con suficiente confianza."
+    else:
+        result_message = f"Clasificación exitosa:"
+        for i, pred in enumerate(predictions, 1):
+            result_message += f"\n{i}. {pred['class']} (confianza: {pred['confidence']:.2f})"
+    
+    print(predictions)
+    
+    return predictions, result_message

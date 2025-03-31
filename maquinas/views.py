@@ -11,9 +11,10 @@ from rest_framework import status
 from django.core.files.base import ContentFile
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def obtenerMetodo(request):
-    metodo = getMetodo('67c3b38a037f576fd63aa26f')
+    distancia =request.data.get('distancia')
+    metodo = getMetodo('67c3b38a037f576fd63aa26f', distancia)
     return Response({"metodo":metodo}, status=status.HTTP_200_OK)
 
 @api_view(['PUT'])
@@ -56,10 +57,10 @@ def setImage(request):
         return Response({'error': 'No image provided or unsupported format'}, 
                       status=status.HTTP_400_BAD_REQUEST)
     
-    from maquinas.modelo.deteccion import detectarObjeto
+    from maquinas.modelo.deteccion import clasificarImagen  
 
     # La función detectarObjeto ahora devuelve una tupla (detections, message)
-    res, message = detectarObjeto(image=image)
+    res, message = clasificarImagen(image)
     
     # Manejo de detecciones
     if not res:

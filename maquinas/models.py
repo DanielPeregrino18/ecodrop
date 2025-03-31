@@ -6,18 +6,18 @@ from administrador.models import actualizarEstadisticas
 maquinas = db["maquinas"]
 
 # ingresar imagen y clasificar, modificar el metodo dependiendo el objeto
-def getMetodo(id):
+def getMetodo(id, distancia):
     maquina = maquinas.find_one({'_id': ObjectId(id)})
     res = maquina['metodo']
-    if res != 0:
-         maquinas.update_one(
-             {'_id': ObjectId(id)},
-             {
-                '$set': {
-                    'metodo': "0",
-                }
-            } 
-         )
+    maquinas.update_one(
+        {'_id': ObjectId(id)},
+        {
+        '$set': {
+            'metodo': "0",
+            'distancia': float(distancia)
+        }
+    } 
+    )
     return res
 
 #agrega el metodo y suma puntos y experiencia

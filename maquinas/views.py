@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .models import getMetodo, modificarEscanear, obtenerEscanear, vincularUsuario, setMetodo
+from usuarios.models import getIdUsuarioByRFID
 from usuarios.tokens import token_required
 from django.core.files.base import ContentFile
 from rest_framework.decorators import api_view, parser_classes
@@ -76,3 +77,22 @@ def setImage(request):
         'message': message or 'Imagen obtenida correctamente', 
         'class': respuesta
     }, status=status.HTTP_201_CREATED)
+
+@api_view(['PUT'])
+def depositoPorRFID(request):
+    try:
+        tag = request.data.get('rfid_tag')
+        id_user = getIdUsuarioByRFID(tag)
+        if id_user is None:
+            return Response({
+                'message': "1"
+            }, status=status.HTTP_201_CREATED)
+        vincularUsuario('67c3b38a037f576fd63aa26f', id_user)
+        modificarEscanear('67c3b38a037f576fd63aa26f')
+        return Response({
+            'message': "1"
+        }, status=status.HTTP_201_CREATED)
+    except:
+        return Response({
+            'message': "0"
+        }, status=status.HTTP_201_CREATED)

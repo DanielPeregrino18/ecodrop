@@ -73,6 +73,12 @@ def getUsuarioPerfilbyId(id):
     usuario.pop('password', None)
     return usuario
 
+def getIdUsuarioByRFID(tag):
+    usuario = usuariosDB.find_one({ "tag": tag })
+    if usuario:
+        return str(usuario["_id"])
+    return None 
+
 def actPerfil(id, username, telefono):
     try:
         usuariosDB.update_one(

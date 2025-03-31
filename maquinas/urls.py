@@ -7,4 +7,6 @@ urlpatterns = [
      path('obtenerEscanear/', views.obtenerEscan, name='obtenerEscanear'),#get
      path('setImagen/', views.setImage, name='setImagen'),#post
      path('vincularUsuario/', views.vincularUser, name='vincularUsuario'),#put
+     path('depositoRFID/', views.depositoPorRFID, name='depositoRFID'),#put
+
 ]

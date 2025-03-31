@@ -129,7 +129,7 @@ class SetImageView(APIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 def clasificarImagen(image):
-    model_path = os.path.join(os.path.dirname(__file__), "../modelo/best.pt")
+    model_path = os.path.join(os.path.dirname(__file__), "../modelo/best929.pt")
     confidence_threshold = 0.52
     
     try:
